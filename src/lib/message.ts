@@ -20,7 +20,7 @@ export const promiseConfirm = (
     cancelText: () => "取消",
   },
 ) => {
-  Modal.confirm({
+  const modal = Modal.confirm({
     ...opt,
     content: () => content,
     onOk: () =>
@@ -31,6 +31,7 @@ export const promiseConfirm = (
           })
           .catch(() => {
             reject();
+            modal.destroy();
           });
       }),
   });
