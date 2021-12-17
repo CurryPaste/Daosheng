@@ -3,6 +3,7 @@ import { reactive } from "@vue/reactivity";
 import { Button, Input as aInput } from "ant-design-vue";
 import { useEffect } from "zcomposition";
 import { version } from "../../package.json";
+import { promiseConfirm } from "../lib/message";
 import { UserService, SoftService } from "../services/index";
 
 const { auth } = UserService;
@@ -14,6 +15,18 @@ const userInfo = reactive({
   code: "",
   password: "",
 });
+const waitTime = () =>
+  new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 3000);
+  });
+const login = (data: typeof userInfo) => {
+  promiseConfirm("这是一个异步调用弹框", async () => {
+    await waitTime();
+    await auth(data);
+  });
+};
 </script>
 
 <template>
@@ -49,7 +62,7 @@ const userInfo = reactive({
           type="primary"
           class="mt-24px !h-40px"
           block
-          @click="auth(userInfo)"
+          @click="login(userInfo)"
         >
           登录
         </Button>
