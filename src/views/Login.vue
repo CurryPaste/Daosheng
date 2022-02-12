@@ -5,11 +5,15 @@ import { useEffect } from "zcomposition";
 import { version } from "../../package.json";
 import { promiseConfirm } from "../lib/message";
 import { UserService, SoftService } from "../services/index";
+// import { useStore } from "vuex";
+// import { key } from "../store";
 
 const { auth } = UserService;
 const { softConfig } = SoftService;
+
 useEffect(() => {
   softConfig();
+  // console.log(store, "store");
 });
 const userInfo = reactive({
   code: "",
