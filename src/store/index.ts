@@ -1,45 +1,43 @@
-/* eslint-disable no-redeclare */
-import { InjectionKey } from "vue";
-import { createStore, Store, useStore as baseUseStore } from "vuex";
-import Demo from "./modules/demo";
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-classes-per-file */
+import {
+  CommitOptions,
+  createStore,
+  DispatchOptions,
+  Store as VuexStore,
+} from "vuex";
+import { Actions, actions } from "./actions/actions";
+import { Getters, getters } from "./getters/getters";
+import { Mutations, mutations } from "./mutations/mutations";
+import { State, state } from "./states";
 
-export interface State {
-  count: number;
-}
-// eslint-disable-next-line symbol-description
-export const key: InjectionKey<Store<State>> = Symbol();
-const store = createStore<State>({
-  state: {
-    count: 0,
-  },
-  mutations: {
-    increment(state) {
-      state.count += 1;
-    },
-  },
-  actions: {
-    increment(context) {
-      context.commit("increment");
-    },
-  },
-  modules: {
-    moduleDemo: Demo,
-  },
+const store = createStore({
+  state,
+  getters,
+  mutations,
+  actions,
+  modules: {},
 });
 
-// declare module "vuex" {
-//   export function useStore<S = StoreStateType & ModulesType>(): Store<S>;
-// }
-type StoreStateType = {
-  tttDe: string;
+export type Store = Omit<
+  VuexStore<State>,
+  "getters" | "commit" | "dispatch"
+> & {
+  commit<K extends keyof Mutations, P extends Parameters<Mutations[K]>[1]>(
+    key: K,
+    payload: P,
+    options?: CommitOptions,
+  ): ReturnType<Mutations[K]>;
+} & {
+  dispatch<K extends keyof Actions>(
+    key: K,
+    payload: Parameters<Actions[K]>[1],
+    options?: DispatchOptions,
+  ): ReturnType<Actions[K]>;
+} & {
+  getters: {
+    [K in keyof Getters]: ReturnType<Getters[K]>;
+  };
 };
-type ModulesType = {
-  tttttDemo: typeof Demo;
-};
-// 定义自己的 `useStore` 组合式函数
-// export function useStore<S = StoreStateType & ModulesType>(): Store<S>;
-export function useStore<S = StoreStateType & ModulesType>(): Store<S> {
-  return baseUseStore<S>(key);
-}
-
+export const useStore = (): Store => store as Store;
 export default store;
