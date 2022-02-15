@@ -5,17 +5,21 @@ import { useEffect } from "zcomposition";
 import { version } from "../../package.json";
 import { promiseConfirm } from "../lib/message";
 import { UserService, SoftService } from "../services/index";
-import { useStore } from "../store";
-import ActionTypes from "../store/actions/action-types";
-import MutationTypes from "../store/mutations/mutation-types";
+import { useStoreSingle } from "../store/singleStore";
+import { useStoreModule } from "../store/moduleStore";
+import ActionTypes from "../store/singleStore/actions/action-types";
+import MutationTypes from "../store/singleStore/mutations/mutation-types";
 // import { key } from "../store";
 
 const { auth } = UserService;
 const { softConfig } = SoftService;
-const store = useStore();
+const store = useStoreSingle();
+const storeModule = useStoreModule();
+console.log("storeModule", storeModule);
+console.log("store", store);
 useEffect(() => {
   softConfig();
-  store.dispatch(ActionTypes.GET_API_INFO, "");
+  store.dispatch(ActionTypes.GET_API_INFO, "aaa");
   store.commit(MutationTypes.SET_TITLE, "asaaa");
 });
 const userInfo = reactive({
