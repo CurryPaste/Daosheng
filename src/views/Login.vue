@@ -21,6 +21,10 @@ useEffect(() => {
   softConfig();
   store.dispatch(ActionTypes.GET_API_INFO, "aaa");
   store.commit(MutationTypes.SET_TITLE, "asaaa");
+  console.log(storeModule.state.user.code);
+  console.log(storeModule.getters["user/get10After"]);
+  storeModule.commit("user/updateName", "test");
+  storeModule.dispatch("user/promiseVoid", 11);
 });
 const userInfo = reactive({
   code: "",
