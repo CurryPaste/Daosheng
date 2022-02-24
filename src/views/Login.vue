@@ -24,6 +24,8 @@ useEffect(() => {
   console.log(storeModule.state.user.code);
   console.log(storeModule.getters["user/get10After"]);
   storeModule.commit("user/updateName", "test");
+  storeModule.commit("user/updateName", "1111");
+  storeModule.commit("user/updateName", "2222");
   storeModule.dispatch("user/promiseVoid", 11);
 });
 const userInfo = reactive({

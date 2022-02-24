@@ -1,5 +1,10 @@
 import { InjectionKey } from "vue";
-import { Store as VuexStore, useStore as baseUseStore } from "vuex";
+import {
+  createLogger,
+  createStore,
+  Store as VuexStore,
+  useStore as baseUseStore,
+} from "vuex";
 import {
   TState as TUserState,
   userModule,
@@ -8,7 +13,9 @@ import {
   TMutations,
 } from "./modules/user.type";
 import { RootGettersReturnType } from "./index.type";
-import { TUserStore } from "./modules/user";
+import { TUserStore, store as userStore } from "./modules/user";
+
+const debug = process.env.NODE_ENV !== "production";
 
 export type TRootState = {
   [userModule]: TUserState;
@@ -26,6 +33,14 @@ export type TRootMutations = {
 export type TRootStore = TUserStore;
 
 export const key: InjectionKey<VuexStore<TRootState>> = Symbol("storeModule");
+
+export const store = createStore({
+  modules: {
+    [userModule]: userStore,
+  },
+  strict: debug,
+  plugins: debug ? [createLogger()] : [],
+});
 
 /** 模块vuex-useStore */
 export const useStoreModule = (): TRootStore => baseUseStore(key);

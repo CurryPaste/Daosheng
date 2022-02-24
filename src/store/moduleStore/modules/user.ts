@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-use-before-define */
 /** user模块 */
-import { ActionTree, GetterTree, MutationTree } from "vuex";
+import { ActionTree, GetterTree, Module, MutationTree } from "vuex";
 import { TRootActions, TRootGetters, TRootMutations, TRootState } from "..";
 import { TCommit, TDispatch, TStore } from "../index.type";
 import {
@@ -71,3 +71,11 @@ export type TUserStore = TStore<
     >;
   }
 >;
+
+export const store: Module<TState, TRootState> = {
+  namespaced: true,
+  state: stateData,
+  getters,
+  actions,
+  mutations,
+} as const;
